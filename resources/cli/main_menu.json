@@ -1,0 +1,6 @@
+[{"key" : "n", "text" : "Start a new game", "command" : "onNewGame"},
+    {"key" : "l", "text" : "Load a saved game", "command" : "onLoadGame"},
+    {"key" : "s", "text" : "Solve a puzzle", "command" : "onSolvePuzzle"},
+    {"key" : "g", "text" : "Generate a puzzle", "command" : "onGeneratePuzzle"},
+    {"key" : "e", "text" : "Quit / exit", "command" : "onExit"}
+]
