@@ -9,8 +9,8 @@ Classes:
     SimpleMenuCLI
 """
 
-__version__ = "0.0.1.0"
-__date__ = "24-09-201"
+__version__ = "0.0.1.1"
+__date__ = "24-09-2018"
 __status__ = "Development"
 
 #imports
@@ -18,6 +18,7 @@ __status__ = "Development"
 #+ standard libraries
 
 import sys
+import os
 import json
 import collections
 
@@ -42,15 +43,19 @@ class SimpleMenuCLI(object):
     
     The event handlers, which are intended as the exit points from the current
     (sub-) menu (not call of the nested sub-menus or dialogues, etc.) must
-    either set the 'private' instance attribute _strStatus to the value defined
-    by the module global variable (constant) DEF_OK_STATUS or simply return that
-    value. The first method is preferable, since the value returned by the event
-    handler, which terminated the interactive user choice prompting loop, is
-    returned as the 'last performed action' to the caller of this (sub-) menu.
+    either set the property Status to the value defined by the module global
+    variable (constant) DEF_OK_STATUS or simply return that value. The first
+    method is preferable, since the value returned by the event handler, which
+    terminated the interactive user choice prompting loop, is returned as the
+    'last performed action' to the caller of this (sub-) menu.
     
     Methods:
         run()
             None -> str
+    
+    Attributes:
+        Status: string, actually, the getter and setter property - the current
+            status of the menu, i.e. the last performed action
     """
     
     #class fields
@@ -71,40 +76,76 @@ class SimpleMenuCLI(object):
         Args:
             strSourceFile: string, name of a configuration JSON file describing
                 the menu structure to be loaded
+        
+        Rasises:
+            Exception: if any of the required event handler methods is not
+                defined (in the sub-class)
         """
         with open(strSourceFile) as fFile:
             distlstOptions = json.load(fFile)
+        strConfFolder = os.path.dirname(strSourceFile)
         self._dictOptions = collections.OrderedDict([
             (dictItem['key'].lower(), {'text' : dictItem['text'],
                                         'command' : dictItem['command']})
                                                 for dictItem in distlstOptions])
-        self._strStatus = 'Undefined'
+        self._dictChildren = dict()
+        for strKey, dictValue in self._dictOptions.items():
+            strCommand = dictValue['command']
+            if not hasattr(self, strCommand):
+                strError = ''.join([self._strMenuName, ' of ',
+                                        self.__class__.__name__, ' class ',
+                                        'does not have ', strCommand,
+                                        '() event handler method'])
+                raise Exception(strError)
+        objCurrentModule = sys.modules[self.__class__.__module__]
+        for dictItem in distlstOptions:
+            strChild = dictItem.get('child', None)
+            if not (strChild is None):
+                if not (strChild in dir(objCurrentModule)):
+                    strError='Class {} is not found or defined'.format(strChild)
+                    raise Exception(strError)
+                strBaseName = dictItem.get('file', None)
+                if not (strBaseName is None):
+                    strFilePath = os.path.join(strConfFolder, strBaseName)
+                    if not os.path.isfile(strFilePath):
+                        strError = 'File {} is not found'.format(strFilePath)
+                        raise Exception(strError)
+                    self._dictChildren[dictItem['command']] = [strChild,
+                                                                    strFilePath]
+                else:
+                    self._dictChildren[dictItem['command']] = [strChild, None]
+        self.Status = 'Undefined'
     
     #helper methods
     
-    def _launchChild(self, strClassName, strSourceFile):
+    def _launchChild(self):
         """
         Helper method to launch a sub-menu or a dialog, etc. - as the response
-        to the choice of the current menu item. Looks up the class in the
-        globals dictionary by the passed name and instantiates it with a
-        configuration file referred by the passed file name. N.B. the 'child'
-        class must have the method run() without arguments.
+        to the choice of the current menu item.
+        
+        Extracts the name of the child object class and the path to the
+        corresponding configuration file in the 'private' instance attribute
+        _dictChildren by the name of the caller method.
+        
+        Looks up the class in the globals dictionary of the caller`s module by
+        the name and instantiates it with a configuration file referred by the
+        extracted file name. N.B. the 'child' class must have the method run()
+        without arguments.
         
         Signature:
             str, str -> str
-        
-        Args:
-            strClassName: string, name of the class implementing the submenu,
-                dialog, etc.; will be looked up in the globals dictionary
-            strSourceFile: string, of a configuration JSON file describing
-                the submenu or dialog, etc. structure / content to be loaded
         
         Returns:
             str: any type which is returned by the child`s method run() being
                 converted into a string
         """
-        clsChild = globals(strClassName)
-        objChild = clsChild(strSourceFile)
+        strCallerName = sys._getframe().f_back.f_code.co_name
+        strClassName, strSourceFile = self._dictChildren[strCallerName]
+        clsChild = sys.modules[self.__class__.__module__].__dict__[strClassName]
+        if strSourceFile is None:
+            objChild = clsChild()
+        else:
+            objChild = clsChild(strSourceFile)
         strResult = str(objChild.run())
         del objChild
         return strResult
@@ -125,13 +166,40 @@ class SimpleMenuCLI(object):
         for strKey, dictValue in self._dictOptions.items():
             strLine = '{}) {}'.format(strKey, dictValue['text'])
             PrintFW(strLine)
-        strLine = '\nStatus: {}\n'.format(self._strStatus)
+        strLine = '\nStatus: {}\n'.format(self.Status)
         PrintFW(strLine)
         strLine = 'Please select menu item ({}) '.format('/'.join([strKey
                                             for strKey in self._dictOptions]))
         sys.stdout.write(strLine)
 
     #public API
+    
+    #properties
+    
+    @property
+    def Status(self):
+        """
+        Getter property to return the current status of the menu.
+        
+        Signature:
+            None -> str
+        """
+        return str(self._strStatus)
+    
+    @Status.setter
+    def Status(self, gValue):
+        """
+        Setter method for the property Status, i.e. sets the current menu status
+        
+        Signature:
+            type A -> None
+        
+        Args:
+            gValue: any type, which is converted into a string.
+        """
+        self._strStatus = str(gValue)
+    
+    #+methods
 
     def run(self):
         """
@@ -143,24 +211,29 @@ class SimpleMenuCLI(object):
         
         The loop continues until an event handler method returns the value
         defined by the sudoku_py.ui.cli.basic_ui_element.DEF_OK_STATUS module
-        global variable (constant) value or explicitely sets the 'private'
-        attribute _strStatus to that value. The second option is preferable for
-        the sub-menus, since the value returned by the event handler, which
-        has caused the loop termination, is returned as a string by this method.
+        global variable (constant) value or explicitely sets the property Status
+        to that value. The second option is preferable for the sub-menus, since
+        the value returned by the event handler, which has caused the loop
+        termination, is returned as a string by this method.
         
         Signature:
             None -> str
+        
+        Returns:
+            str: the converted to a string value returned by the event handler
+                method, which resulted in the breakage of the interactive prompt
+                loop
         """
-        while self._strStatus != DEF_OK_STATUS:
+        while self.Status != DEF_OK_STATUS:
             self._show()
             strSelection = raw_input()
             strSelection = strSelection.lower()
             if strSelection in self._dictOptions:
                 funHandler = getattr(self,
                                     self._dictOptions[strSelection]['command'])
-                strResult = str(funHandler())
-                if self._strStatus != DEF_OK_STATUS:
-                    self._strStatus = strResult
+                strResult = funHandler()
+                if self.Status != DEF_OK_STATUS:
+                    self.Status = strResult
             else:
-                self._strStatus = 'Wrong selection! Try again!'
+                self.Status = 'Wrong selection! Try again!'
         return strResult

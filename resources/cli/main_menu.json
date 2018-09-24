@@ -2,5 +2,9 @@
     {"key" : "l", "text" : "Load a saved game", "command" : "onLoadGame"},
     {"key" : "s", "text" : "Solve a puzzle", "command" : "onSolvePuzzle"},
     {"key" : "g", "text" : "Generate a puzzle", "command" : "onGeneratePuzzle"},
+    {"key" : "h", "text" : "Show help", "command" : "onHelp",
+        "child" : "HelpMenu", "file" : "help_menu.json"},
+    {"key" : "r", "text" : "Show high scores / records",
+        "command" : "onShowRecords"},
     {"key" : "e", "text" : "Quit / exit", "command" : "onExit"}
 ]
