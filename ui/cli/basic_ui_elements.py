@@ -89,7 +89,7 @@ class SimpleMenuCLI(object):
                                         'command' : dictItem['command']})
                                                 for dictItem in distlstOptions])
         self._dictChildren = dict()
-        for strKey, dictValue in self._dictOptions.items():
+        for dictValue in self._dictOptions.values():
             strCommand = dictValue['command']
             if not hasattr(self, strCommand):
                 strError = ''.join([self._strMenuName, ' of ',
