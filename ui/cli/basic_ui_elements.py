@@ -9,6 +9,10 @@ Classes:
     SimpleMenuCLI
 """
 
+__version__ = "0.0.1.0"
+__date__ = "24-09-201"
+__status__ = "Development"
+
 #imports
 
 #+ standard libraries
@@ -21,14 +25,32 @@ import collections
 
 from sudoku_py.ui.cli.terminal_utils import ClearConsole, PrintFW
 
+#globals
+
+DEF_OK_STATUS = 'Ok'
+
 #classes
 
 class SimpleMenuCLI(object):
     """
+    Prototype class for the CLI menu. The subclasses must redefine the value of
+    the 'private' class attribute _strMenuName - the name of the menu - and to
+    implement the event handle methods for each of the menu items. The names of
+    these method must be the same, as defined in the configuration file; they
+    must be called without arguments and return either a string, or an object,
+    which can be converted into a string.
+    
+    The event handlers, which are intended as the exit points from the current
+    (sub-) menu (not call of the nested sub-menus or dialogues, etc.) must
+    either set the 'private' instance attribute _strStatus to the value defined
+    by the module global variable (constant) DEF_OK_STATUS or simply return that
+    value. The first method is preferable, since the value returned by the event
+    handler, which terminated the interactive user choice prompting loop, is
+    returned as the 'last performed action' to the caller of this (sub-) menu.
     
     Methods:
         run()
-            None -> type A
+            None -> str
     """
     
     #class fields
@@ -62,8 +84,14 @@ class SimpleMenuCLI(object):
     
     def _launchChild(self, strClassName, strSourceFile):
         """
+        Helper method to launch a sub-menu or a dialog, etc. - as the response
+        to the choice of the current menu item. Looks up the class in the
+        globals dictionary by the passed name and instantiates it with a
+        configuration file referred by the passed file name. N.B. the 'child'
+        class must have the method run() without arguments.
+        
         Signature:
-            str, str -> type A
+            str, str -> str
         
         Args:
             strClassName: string, name of the class implementing the submenu,
@@ -72,16 +100,22 @@ class SimpleMenuCLI(object):
                 the submenu or dialog, etc. structure / content to be loaded
         
         Returns:
-            type A: any type, which is returned by the child`s method run()
+            str: any type which is returned by the child`s method run() being
+                converted into a string
         """
         clsChild = globals(strClassName)
         objChild = clsChild(strSourceFile)
-        gResult = objChild.run()
+        strResult = str(objChild.run())
         del objChild
-        return gResult
+        return strResult
     
     def _show(self):
         """
+        Helper method do display the menu content. Clears the console. Then it
+        prints out the menu name, its items in the same order, as defined in the
+        configuration file, the current status (i.e. the last choice made) and
+        the user prompt line.
+        
         Signature:
             None -> None
         """
@@ -101,18 +135,32 @@ class SimpleMenuCLI(object):
 
     def run(self):
         """
+        Main method. Implements interactive loop of displaying the menu content
+        and prompting the user input, until a proper menu item is chosen. When
+        a proper menu item is chosen, the corresponing event handler method is
+        called, and the returned result is assigned (as a string) to the current
+        status of the menu.
+        
+        The loop continues until an event handler method returns the value
+        defined by the sudoku_py.ui.cli.basic_ui_element.DEF_OK_STATUS module
+        global variable (constant) value or explicitely sets the 'private'
+        attribute _strStatus to that value. The second option is preferable for
+        the sub-menus, since the value returned by the event handler, which
+        has caused the loop termination, is returned as a string by this method.
+        
         Signature:
-            None -> type A
+            None -> str
         """
-        while self._strStatus != 'Ok':
+        while self._strStatus != DEF_OK_STATUS:
             self._show()
             strSelection = raw_input()
             strSelection = strSelection.lower()
             if strSelection in self._dictOptions:
-                self._strStatus = 'Ok'
                 funHandler = getattr(self,
                                     self._dictOptions[strSelection]['command'])
-                strResult = funHandler()
+                strResult = str(funHandler())
+                if self._strStatus != DEF_OK_STATUS:
+                    self._strStatus = strResult
             else:
                 self._strStatus = 'Wrong selection! Try again!'
         return strResult

@@ -7,6 +7,10 @@ Functions:
         None -> None
 """
 
+__version__ = "0.0.1.0"
+__date__ = "24-09-201"
+__status__ = "Development"
+
 #imports
 
 import sys

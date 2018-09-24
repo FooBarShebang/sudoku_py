@@ -42,7 +42,11 @@ Functions:
         None -> (int, int)
 """
 
-__all__ = ['GetTerminalSize()']
+__version__ = "0.0.1.0"
+__date__ = "24-09-2018"
+__status__ = "Production"
+
+__all__ = ['GetTerminalSize']
 #in order to hide helper functions from 'from <...> import *'
 
 #imports
@@ -132,7 +136,7 @@ def _GetWinSize_stty():
         except:
             try: #to account for input redirection
                 with open('/dev/tty') as tty:
-                    itlstTemp = map(int,
+                    ilstTemp = map(int,
                                     subprocess.check_output(['stty', 'size'],
                                                         stdin = tty).split())
                 itupResult = (ilstTemp[1], ilstTemp[0])
@@ -191,7 +195,6 @@ def _GetWinSize_ioctl():
         None: if failed to determine the console size
     """
     itupResult = None
-    strCurrentOS = platform.system()
     bCond1 = 'termios' in sys.modules
     bCond2 = 'fcntl' in sys.modules
     if bCond1 and bCond2:

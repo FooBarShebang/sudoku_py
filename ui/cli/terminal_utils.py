@@ -12,10 +12,14 @@ Functions:
     ClearConsole()
         None -> None
     PrintFW()
-        type A\, int OR None\ -> None
+        type A/, int OR None/ -> None
     PrintLess()
-        \type A\, type B\, ...\\\ -> None
+        /type A/, type B/, .../// -> None
 """
+
+__version__ = "0.0.1.0"
+__date__ = "24-09-2018"
+__status__ = "Development"
 
 __all__ = ['ClearConsole', 'PrintFW', 'PrintLess']
 #in order to hide helper functions from 'from <...> import *'
@@ -70,7 +74,7 @@ def _SplitString(strLine, iColumns):
     Helper functions, which splits the passed string (ASCII or Unicode) into a
     list of the unicode sub-strings. The passed string (first argument) is
     treated as a stream, and is read-out per character. The extracted characters
-    are stored in a buffer unicode string, until the LF ('\n') character is
+    are stored in a buffer unicode string, until the LF (ASCII 10) character is
     encountered or the buffer string becomes of iColumns or greater length, or
     the end of the passed string is reached. In all cases the current buffer
     string is copied into the list of the sub-strings to be returned and is
@@ -128,13 +132,13 @@ def PrintFW(gItem, iColumns = None):
     __repr__() - as the fallback option. The second (optional or keyword)
     argument defines the mode of operation. If it is not provided or None, the
     consructed unicode string is printed out as it is but with an additional LF
-    ('\n') character. If a positive integer is provided the produced string is
-    spit up into the sub-strings no longer than that length, and each is printed
-    out on its own line in the terminal. The additional LF character is also
-    added to the last line.
+    (ASCII 10) character. If a positive integer is provided the produced string
+    is spit up into the sub-strings no longer than that length, and each is
+    printed out on its own line in the terminal. The additional LF character is
+    also added to the last line.
     
     Signature:
-        type A\, int OR None\ -> None
+        type A/, int OR None/ -> None
     
     Args:
         strLine: ASCII or Unicode string to be split
@@ -157,8 +161,8 @@ def PrintFW(gItem, iColumns = None):
 def _PrintPage(ustrPrintBuffer):
     """
     Helper function, which prints out each string in the passed sequence of
-    strings and adds LF ('\n') into each; aftewards prints a prompt message and
-    awaits user input. The returned boolean value is defined by the user input.
+    strings and adds LF (ASCII 10) into each; aftewards prints a prompt message
+    and awaits the user input, which defines the returned boolean value.
     
     Signature:
         seq(str OR unicode) -> bool
@@ -206,7 +210,7 @@ def PrintLess(*args):
     will proceed to the next 'page'.
     
     Signature:
-        \type A\, type B\, ...\\\ -> None
+        /type A/, type B/, .../// -> None
     
     Args:
         *args: any number of arguments of any type
