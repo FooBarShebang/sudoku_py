@@ -7,6 +7,7 @@ others:
     *) clearing of the console
     *) emulation of the fixed size console of the smaller width than the actual
     *) emulation of the paginated output of a large text
+    *) listening for a keystroke event
 
 Functions:
     ClearConsole()
@@ -15,13 +16,15 @@ Functions:
         type A/, int OR None/ -> None
     PrintLess()
         /type A/, type B/, .../// -> None
+    GetKeystroke()
+        None -> unicode
 """
 
-__version__ = "0.0.1.0"
-__date__ = "24-09-2018"
+__version__ = "0.0.1.1"
+__date__ = "26-09-2018"
 __status__ = "Development"
 
-__all__ = ['ClearConsole', 'PrintFW', 'PrintLess']
+__all__ = ['ClearConsole', 'PrintFW', 'PrintLess', 'GetKeystroke']
 #in order to hide helper functions from 'from <...> import *'
 
 #imports
@@ -36,6 +39,16 @@ import collections
 #+ other modules from the package
 
 from sudoku_py.ui.cli.terminal_size import GetTerminalSize
+
+#+ platform specific imports
+
+try:
+    from sudoku_py.ui.cli.keystroke_linux import KeyboardListenerLinux
+except:
+    try:
+        from sudoku_py.ui.cli.keystroke_windows import KeyboardListenerWindows
+    except:
+        pass
 
 #functions
 
@@ -236,3 +249,35 @@ def PrintLess(*args):
     if len(ustrPrintBuffer):
         for ustrLine in ustrPrintBuffer:
             sys.stdout.write('{}\n'.format(ustrLine))
+
+def GetKeystroke():
+    """
+    Keyboard listener. Waits until a keystroke is received and returns it as
+    a unicode string. Normal keys (including localized, e.g. Russian, layouts)
+    are returned as a single unicode character. The special keys, as cursor
+    keys, page up / down, F1, etc., are returned as escape sequences specific to
+    a platform. In case of POSIX systems - ASCII ESC-CSI, i.e. sequence of bytes
+    within a unicode string.
+    
+    On POSIX systems may return more than one last keystroke, especially if a
+    special key (ASCII ESC-CSI) was followed by a 'normal' key.
+    
+    Signature:
+        None -> unicode
+    
+    Returns:
+        unicode: a proper unicode character (decoded!) or an escape sequence
+            (platform depended) in a unicode string
+    
+    Raises:
+        Exception: not supported platform / OS
+    """
+    if 'KeyboardListenerLinux' in globals():
+        objTemp = KeyboardListenerLinux()
+        ustrResult = objTemp.GetKeystroke()
+        del objTemp
+    elif 'KeyboardListenerWindows' in globals():
+        ustrResult = u'N' #to be fixed
+    else:
+        raise Exception('Not supported OS platform')
+    return ustrResult

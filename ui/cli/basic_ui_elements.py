@@ -21,14 +21,18 @@ import sys
 import os
 import json
 import collections
+import time
 
 #+ other modules from the package
 
 from sudoku_py.ui.cli.terminal_utils import ClearConsole, PrintFW
+from sudoku_py.ui.cli.terminal_utils import GetKeystroke
 
 #globals
 
 DEF_OK_STATUS = 'Ok'
+
+DEF_CHOICE_SHOW_DELAY = 0.25
 
 #classes
 
@@ -168,7 +172,7 @@ class SimpleMenuCLI(object):
             PrintFW(strLine)
         strLine = '\nStatus: {}\n'.format(self.Status)
         PrintFW(strLine)
-        strLine = 'Please select menu item ({}) '.format('/'.join([strKey
+        strLine = 'Please select menu item ({})\n'.format('/'.join([strKey
                                             for strKey in self._dictOptions]))
         sys.stdout.write(strLine)
 
@@ -226,8 +230,10 @@ class SimpleMenuCLI(object):
         """
         while self.Status != DEF_OK_STATUS:
             self._show()
-            strSelection = raw_input()
+            strSelection = GetKeystroke()
             strSelection = strSelection.lower()
+            PrintFW(strSelection)
+            time.sleep(DEF_CHOICE_SHOW_DELAY)
             if strSelection in self._dictOptions:
                 funHandler = getattr(self,
                                     self._dictOptions[strSelection]['command'])

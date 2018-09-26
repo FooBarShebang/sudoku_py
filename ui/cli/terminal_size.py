@@ -9,7 +9,7 @@ approaches depending on the current OS and Python installation. If all methods
 fail - returns the default (e.g. 80 x 25) size; which values are controlled by
 the module globals DEF_CONSOLE_COLUMNS and DEF_CONSOLE_LINES.
 
-Inspired by and based upon the receipes proposed as Stackoverflow web-site
+Inspired by and based upon the receipes proposed at the Stackoverflow web-site
 
 htts://stackoverflow.com/questions/566746/how-to-get-linux-console-window-
 width-in-python
