@@ -10,9 +10,7 @@ fail - returns the default (e.g. 80 x 25) size; which values are controlled by
 the module globals DEF_CONSOLE_COLUMNS and DEF_CONSOLE_LINES.
 
 Inspired by and based upon the receipes proposed at the Stackoverflow web-site
-
-htts://stackoverflow.com/questions/566746/how-to-get-linux-console-window-
-width-in-python
+    *) htts://stackoverflow.com/questions/566746/
 
 This module is specific for the Python 2.7, and it is not required at all with
 Python 3.3+.
@@ -24,6 +22,7 @@ Tested on:
         *) In Geany v1.32 (Bemos)
         *) Directly in Mate Terminal v1.20.0
     2) MS Windows 8 64 bit with CPython v2.7.9 32 bit
+        *) In Visual Studio Code v1.27.2
         *) In Geany v1.24 (Sakai)
         *) Directly in the console
     3) MS Windows 8 64 bit with CPython v2.7.15 64 bit

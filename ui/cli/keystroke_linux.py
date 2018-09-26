@@ -11,15 +11,19 @@ Otherwise the console will behave strangly as well as some sdtin related
 threading problems may occur.
 
 Based upon the ideas from
-    *) https://stackoverflow.com/questions/2408560/python-nonblocking-console-
-        input
-    * https://stackoverflow.com/questions/21791621/taking-input-from-sys-stdin-
-        non-blocking
-    *) https://stackoverflow.com/questions/18018033/how-to-stop-a-looping-
-        thread-in-python
-    *) https://stackoverflow.com/questions/292095/polling-the-keyboard-detect-a-
-        keypress-in-python
+    *) https://stackoverflow.com/questions/2408560/
+    * https://stackoverflow.com/questions/21791621/
+    *) https://stackoverflow.com/questions/18018033/
+    *) https://stackoverflow.com/questions/292095/
     *) https://github.com/magmax/python-readchar
+        Danny Yoo (http://code.activestate.com/recipes/134892/)
+
+Tested on:
+    1) Linux Mint 19 (Tara) 64 bit (kernel v4.15.0-34) with CPython v2.7.15rc1
+    64 bit
+        *) In Visual Studio Code v1.27.2
+        *) In Geany v1.32 (Bemos)
+        *) Directly in Mate Terminal v1.20.0
 
 Classes:
     InputBufferLinux
@@ -32,7 +36,7 @@ Functions:
 
 __version__ = "0.0.1.0"
 __date__ = "26-09-2018"
-__status__ = "Testing"
+__status__ = "Production"
 
 #imports
 
@@ -348,7 +352,7 @@ class KeyboardListenerLinux(object):
         
         Returns:
             unicode: the last registered keystroke as a unicode character
-                decoded) or ASCII ESC-CSI characters sequence in an unicode
+                (decoded) or ASCII ESC-CSI characters sequence in an unicode
                 string; N.B. sometimes, especially a the escape sequence
                 followed by a 'normal' character, may return 2 last keystrokes
                 in the proper order but in the single unicode string
