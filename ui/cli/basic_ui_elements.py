@@ -231,7 +231,7 @@ class SimpleMenuCLI(object):
         while self.Status != DEF_OK_STATUS:
             self._show()
             strSelection = GetKeystroke()
-            strSelection = strSelection.lower()
+            strSelection = strSelection.lower()[-1]
             PrintFW(strSelection)
             time.sleep(DEF_CHOICE_SHOW_DELAY)
             if strSelection in self._dictOptions:
