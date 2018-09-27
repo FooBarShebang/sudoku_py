@@ -1,0 +1,10 @@
+!define UI_CLI_KEYSTROKE_WINDOWS_KEYBOARDLISTENERWINDOWS
+
+!ifndef CLASSES
+!include ../../../Templates/Classes.cuml
+!endif
+
+class KeyboardListenerWindows <<SINGLETON>> {
+    __
+    static_method(GetKeystroke) : None -> unicode
+}

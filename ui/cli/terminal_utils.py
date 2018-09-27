@@ -247,11 +247,12 @@ def _PrintPage(ustrPrintBuffer):
             raise TypeError('Not a sequence of strings')
         for ustrLine in ustrPrintBuffer:
             sys.stdout.write('{}\n'.format(ustrLine))
-        sys.stdout.write('---LESS (type q or Q to exit)---')
+        sys.stdout.write('---LESS (press q or Q to exit)---')
         sys.stdout.flush()
         strResult = GetKeystroke()
         sys.stdout.write('\n')
-        if strResult.lower().endswith('q'):
+        strResult = strResult.lower()
+        if strResult in [u'q', u'Q']:
             return False
         return True
     else:

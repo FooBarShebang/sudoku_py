@@ -61,7 +61,7 @@ class KeyboardListenerWindows(object):
         
         Unicode support. The unicode characters are already properly generated
         in the u'\u...' form by the console input, but they cannot be displayed
-        in the console, at least in Windows 7.
+        in the console, at least in Windows 8.
         
         Signature:
             None -> unicode

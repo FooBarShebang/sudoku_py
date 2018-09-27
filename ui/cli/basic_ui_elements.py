@@ -231,7 +231,11 @@ class SimpleMenuCLI(object):
         while self.Status != DEF_OK_STATUS:
             self._show()
             strSelection = GetKeystroke()
-            strSelection = strSelection.lower()[-1]
+            strSelection = strSelection.lower()
+            if len(strSelection) > 1:
+                strSelection = 'Special key'
+            elif strSelection < u'\x20' or strSelection > u'\x7e':
+                strSelection = 'Not printable ASCII'
             PrintFW(strSelection)
             time.sleep(DEF_CHOICE_SHOW_DELAY)
             if strSelection in self._dictOptions:

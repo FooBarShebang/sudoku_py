@@ -1,0 +1,41 @@
+/' for components / deployment diagrams '/
+
+!define COMPONENTS
+
+/' aliases for standard elements with stereotype decorators.
+Two variants are defined for each alias: with one and with two parameters.
+The first argument in both cases may be a single token (without quotes)
+or a several tokens (with spaces, etc.) taken into quotes - this is the
+dispaly name of the component. With only single argument call it is also the
+reference of the created element.
+The second argument must be a single token (without quotes) as the reference
+of the created element.
+'/
+
+!define class(x) component "x" <<class>>
+
+!define class(x, y) component "x" as y <<class>>
+
+!define function(x) component "x" <<function>>
+
+!define function(x, y) component "x" as y <<function>>
+
+!define file(x) component "x" <<file>>
+
+!define file(x, y) component "x" as y <<file>>
+
+!define module(x) frame "x" <<module>>
+
+!define module(x, y) frame "x" as y <<module>>
+
+!define package(x) package "x" <<package>>
+
+!define package(x, y) package "x" as y <<package>>
+
+!define library(x) package "x" <<library>>
+
+!define library(x, y) package "x" as y <<library>>
+
+!define pc(x) node "x" <<PC>>
+
+!define pc(x, y) node "x" as y <<PC>>
