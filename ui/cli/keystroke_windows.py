@@ -15,6 +15,9 @@ Tested on:
         *) In Visual Studio Code v1.27.2
         *) In Geany v1.24 (Sakai)
         *) Directly in the console
+    2) MS Windows 10 (Home, 64 bit) with CPython v2.7.15 64 bit
+        *) In Visual Studio Code v1.27.2
+        *) Directly in the console
 
 Classes:
     KeyboardListenerWindows
@@ -39,8 +42,8 @@ class KeyboardListenerWindows(object):
     returned as escape sequences - 2 bytes starting with '\x00' or '\xe0' within
     a unicode string. Unicode input is suported, e.g. Cyrillic, since the
     Windows console generates them properly, and they are captured as wide
-    characters using msvcrt.getwch(). However, at least, on Windows 8, the
-    console cannot display them.
+    characters using msvcrt.getwch(). However, at least, on Windows 8 and 10,
+    the console cannot display them properly.
     
     Does not have to be instantiated, since it defines a single class method.
     
@@ -61,7 +64,7 @@ class KeyboardListenerWindows(object):
         
         Unicode support. The unicode characters are already properly generated
         in the u'\u...' form by the console input, but they cannot be displayed
-        in the console, at least in Windows 8.
+        in the console, at least in Windows 8 and 10.
         
         Signature:
             None -> unicode
@@ -78,4 +81,3 @@ class KeyboardListenerWindows(object):
                     uChar += msvcrt.getwch()
                 break
         return uChar
-

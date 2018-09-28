@@ -18,7 +18,9 @@ The expected *modus operandi* is that a CLI user interface element (menu, dialog
 
 The internet search quickly revealed that the easiest and the most reliable way is to use the MS Windows specific module **msvcrt** and the function **getch**() from it. A fine example of this approach can be found at [^1].
 
-Futher analysis and experimentation revealed that the function **getwch**() from the same module suits better, since it returns the Unicode input (e.g. Cyrillic leter) as a single unicode character, already in the u'\uxxxx' form, even though the Windows` console itself cannot properly display it (as tested on Windows 8). The control codes (specal keys, like cursor or F1) are still generated as two ASCII bytes with the first one being '\x00' or '\xe0', so the second byte is to be read explicitely.
+Futher analysis and experimentation revealed that the function **getwch**() from the same module suits better, since it returns the Unicode input (e.g. Cyrillic leter) as a single unicode character, already in the u'\uxxxx' form, even though the Windows` console itself cannot properly display it (as tested on Windows 8 and 10). The control codes (specal keys, like cursor or F1) are still generated as two ASCII bytes with the first one being '\x00' or '\xe0', so the second byte is to be read explicitely.
+
+**Note**: on Windows 10 the Unicode characters can be used in the system console, and they are displayed correctly. Furthermore, they are displayed correctly in the 'echo' of the Python raw_input() function, and are stored as '\uxxxx' characters in the result. However, an attempt to print out (using print or sys.stdout.write()) such a character (not Latin / printable ASCII) results in an exception. Apparently, the problem is with the Python (tested on CPython v2.7.15).
 
 ### References
 
@@ -68,11 +70,14 @@ Blocking class method to listen to the keyboard and to return the keystroke made
 
 The special keys, as cursor keys, page up / down, F1, etc., are returned as escape sequences - 2 bytes starting with '\x00' or '\xe0' within a unicode string.
 
-Unicode support. The unicode characters are already properly generated in the u'\u...' form by the console input, but they cannot be displayed in the console, at least in Windows 8.
+Unicode support. The unicode characters are already properly generated in the u'\u...' form by the console input, but they cannot be displayed in the console, at least in Windows 8 and 10.
 
 ## Tested platforms
 
 * MS Windows 8 64 bit with CPython v2.7.9 32 bit
   - In Visual Studio Code v1.27.2
   - In Geany v1.24 (Sakai)
+  - Directly in the console
+* MS Windows 10 (Home, 64 bit) with CPython v2.7.15 64 bit
+  - In Visual Studio Code v1.27.2
   - Directly in the console

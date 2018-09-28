@@ -31,6 +31,7 @@ Tested on:
         *) Directly in the console
     4) MS Windows 10 64 bit with CPython v2.7.15 64 bit
         *) Directly in the console
+        *) In Visual Studio Code v1.27.2
 
 It does not work properly within Eclipse PyDev environment and within IDLE
 due to their console implementation. In these situations the default console

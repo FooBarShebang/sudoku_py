@@ -19,6 +19,8 @@ Tested on:
         *) In Visual Studio Code v1.27.2
         *) In Geany v1.24 (Sakai)
         *) Directly in the console
+    3) MS Windows 10 (Home, 64 bit) with CPython v2.7.15 64 bit
+        *) In Visual Studio Code v1.27.2
 
 Functions:
     ClearConsole()
