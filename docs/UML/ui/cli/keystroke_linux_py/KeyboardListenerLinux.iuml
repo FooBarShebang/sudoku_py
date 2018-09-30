@@ -1,0 +1,15 @@
+!define UI_CLI_KEYSTROKE_LINUX_KEYBOARDLISTENERLINUX
+
+!ifndef CLASSES
+!include ../../../Templates/Classes.cuml
+!endif
+
+class KeyboardListenerLinux {
+    + InputBuffer: InputBufferLinux
+    + objStopper: threading.Event
+    + InputThread: threading.Thread
+    __
+    + _ _init_ _(): None -> None
+    + _ _del_ _(): None -> None
+    + GetKeystroke() : None -> unicode
+}

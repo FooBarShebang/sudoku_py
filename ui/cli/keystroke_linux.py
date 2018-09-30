@@ -221,6 +221,10 @@ class InputBufferLinux(object):
         
         Signature:
             str -> None
+        
+        Args:
+            strData: string, ASCII supposedly, the data to be put into the
+                input buffer
         """
         self._checkOutBufferLifeTime()
         for Char in strData:

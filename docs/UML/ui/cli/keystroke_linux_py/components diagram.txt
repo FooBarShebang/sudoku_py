@@ -1,0 +1,25 @@
+@startuml
+
+title Components Diagram of the Module ui.cli.keystroke_linux
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(sys) {
+    component stdin <<stream>>
+}
+
+function(ReadSTDIN_NonBlocking_Linux)
+
+stdin <-- ReadSTDIN_NonBlocking_Linux : checks and\ngets data from
+
+class(InputBufferLinux)
+
+InputBufferLinux <-- ReadSTDIN_NonBlocking_Linux : sends data to
+
+class(KeyboardListenerLinux)
+
+InputBufferLinux <-- KeyboardListenerLinux : checks and\ngets data from
+
+@enduml

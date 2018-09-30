@@ -372,37 +372,3 @@ def GetTerminalSize():
     if itupResult is None:
         itupResult = _GetWinSize_default()
     return itupResult
-
-#testing area
-
-if __name__ == '__main__':
-    #the clear screen part is implemented as a separate function, here it is
-    #reproduced to avoid circular dependency between the modules
-    strCurrentOS = platform.system()
-    bCond1 = strCurrentOS == 'Linux'
-    bCond2 = strCurrentOS == 'Darwin'
-    bCond3 = strCurrentOS.startswith('CYGWIN')
-    bCond4 = strCurrentOS == 'Windows'
-    if bCond1 or bCond2 or bCond3:
-        sys.stdout.write('\033[H\033[J')
-    elif bCond4:
-        _ = os.system('cls')
-    #actual self-test
-    print "Performing self-test..."
-    print "{} v {} ({}) on {}".format(platform.python_implementation(),
-                                    platform.python_version(),
-                                    platform.architecture(),
-                                    platform.platform())
-    print "Checking the GetTerminalSize options..."
-    print "Using curses: {}".format(_GetWinSize_curses())
-    print "Using stty: {}".format(_GetWinSize_stty())
-    print "Using tput: {}".format(_GetWinSize_tput())
-    print "Using ioctl: {}".format(_GetWinSize_ioctl())
-    print "Using windll: {}".format(_GetWinSize_windll())
-    print "Using os.environ: {}".format(_GetWinSize_os_environ())
-    print "Using defaults: {}".format(_GetWinSize_default())
-    print "Checking the aggregation functions..."
-    print "Using all POSIX options: {}".format(_GetWinSize_POSIX())
-    print "Using all MS Windows options: {}".format(_GetWinSize_MSWIN())
-    print "Checking the main function GetTerminalSize()..."
-    print GetTerminalSize()

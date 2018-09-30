@@ -24,17 +24,17 @@ Futher analysis and experimentation revealed that the function **getwch**() from
 
 ### References
 
-[^1]: [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892).
+[^1]: [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892)
 
 ## Design
 
 The module implements a single class with a single class method, thus there is no need to instantiate it. Furthermore, this class is intended to be used as a singleton.
 
-![Class diagram of the module](./UML/ui/cli/keystroke_windows/class_diagram.png)
+![Class diagram of the module](./UML/ui/cli/keystroke_windows_py/class_diagram.png)
 
 The class method **KeyboardListenerWindows.GetKeystroke**() is blocking. It loops until a keypress event is registered, see **msvcrt.kbhit**(). After a keypress event is detected, it reads a wide character from the input using **msvcrt.getwch**(). If the read character is 'u\x00' or u'\xe0' - the second character is read out and appended to the first.
 
-![Activity Diagram of KeyboardListenerWindows.GetKeystroke() Method](./UML/ui/cli/keystroke_windows/KeyboardListenerWindows_GetKeystroke()_Activity.png)
+![Activity Diagram of KeyboardListenerWindows.GetKeystroke() Method](./UML/ui/cli/keystroke_windows_py/KeyboardListenerWindows_GetKeystroke()_Activity.png)
 
 ## Usage
 

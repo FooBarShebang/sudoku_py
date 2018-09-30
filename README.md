@@ -34,7 +34,7 @@ The documenation is written in the form of the text files using Markdown format,
     + basic_ui_elements.py
     + [keystroke_linux.py](./docs/ui_cli_keystroke_linux.md)
     + [keystroke_windows.py](./docs/ui_cli_keystroke_windows.md)
-    + terminal_size.py
+    + [terminal_size.py](./docs/ui_cli_terminal_size.md)
     + [terminal_utils.py](./docs/ui_cli_terminal_utils.md)
     + user_menus.py
 * sudoku_py_cli.py

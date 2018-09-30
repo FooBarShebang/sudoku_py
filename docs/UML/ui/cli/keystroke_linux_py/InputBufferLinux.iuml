@@ -1,0 +1,19 @@
+!define UI_CLI_KEYSTROKE_LINUX_INPUTBUFFERLINUX
+
+!ifndef CLASSES
+!include ../../../Templates/Classes.cuml
+!endif
+
+class InputBufferLinux {
+    # _strBuffer: str
+    # _strOutBuffer: unicode
+    # _NotESC_CSI: bool
+    # _dLastTime: double
+    + IsReady: bool
+    __
+    + _ _init_ _(): None -> None
+    # _checkOutBufferLifeTime(): None -> None
+    # _transferBuffer(): None -> None
+    + put(): str -> None
+    + get(): None -> unicode OR None
+}

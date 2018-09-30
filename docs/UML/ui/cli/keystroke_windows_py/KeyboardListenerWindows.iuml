@@ -6,5 +6,5 @@
 
 class KeyboardListenerWindows <<SINGLETON>> {
     __
-    static_method(GetKeystroke) : None -> unicode
+    + static_method(GetKeystroke) : None -> unicode
 }
