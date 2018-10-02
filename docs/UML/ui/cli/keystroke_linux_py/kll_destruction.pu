@@ -1,0 +1,19 @@
+@startuml
+
+title Activity Diagram of the KeyboardListenerLinux Destruction
+
+start
+
+if (listening thread <b>self.InputThread</b> is alive?) then (True)
+        :set the stopper object <b>self.objStopper.set</b>();
+        
+        :wait for thread to finish and join <b>self.InputThread.join</b>();
+    endif
+
+:'delete' the thread **del self.InputThread** ;
+
+:**self.InputThread** = None;
+
+stop
+
+@enduml

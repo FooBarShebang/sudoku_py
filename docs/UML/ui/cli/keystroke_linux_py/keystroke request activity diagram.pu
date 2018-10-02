@@ -1,0 +1,77 @@
+@startuml
+
+title Activity Diagram of the Keystroke Acquisition
+
+start
+
+fork
+    
+    :'user interface']
+    
+    while (while user input is required)
+        if (is there data\nin the buffer?) then (True)
+            :copy data\nfrom buffer;
+            
+            :clear buffer;
+            
+            :return data>
+        endif
+    end while
+
+fork again
+    
+    :buffer]
+    
+    if (Action?) then (put)
+        :data<
+        
+        :clear the buffer;
+        
+        :copy data to buffer;
+        
+        :reset the timer;
+    else (get)
+        if (data expired?) then (Yes)
+            :clear the buffer;
+            
+            :reset the timer;
+        endif
+        
+        if (buffer has data?) then (Yes)
+            :copy buffer to Result;
+            
+            :clear the buffer;
+            
+            :reset the timer;
+            
+            :return Result>
+        else (No)
+            :return None>
+        endif
+    endif
+
+fork again
+    
+    :listener]
+    
+    while (Stopper is not set)
+        :check <b>stdin</b> ;
+        
+        if (data is available ?) then (Yes)
+            while (while not a proper sequence)
+                :read 1 byte from <b>stdin</b> ;
+                
+                :append it to the internal buffer;
+            end while
+            
+            :convert the byte sequence\ninto an ASCII / Unicode\ncharacter or a sequence\nof ASCII chars in a unicode\nstring;
+            
+            :send it to the buffer>
+        endif
+    end while
+
+end fork
+
+stop
+
+@enduml

@@ -5,15 +5,11 @@
 !endif
 
 class InputBufferLinux {
-    # _strBuffer: str
     # _strOutBuffer: unicode
-    # _NotESC_CSI: bool
     # _dLastTime: double
     + IsReady: bool
     __
     + _ _init_ _(): None -> None
-    # _checkOutBufferLifeTime(): None -> None
-    # _transferBuffer(): None -> None
-    + put(): str -> None
+    + put(): str OR unicode -> None
     + get(): None -> unicode OR None
 }

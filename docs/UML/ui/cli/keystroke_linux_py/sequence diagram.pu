@@ -58,9 +58,11 @@ loop while Stopper is not stream
         
         stdin --> ReadSTDIN_NonBlocking_Linux : [Ok]
         
-        ReadSTDIN_NonBlocking_Linux --> stdin : get 1 byte
-        
-        stdin --> ReadSTDIN_NonBlocking_Linux : [first byte]
+        loop while not proper sequence
+            ReadSTDIN_NonBlocking_Linux --> stdin : get 1 byte
+            
+            stdin --> ReadSTDIN_NonBlocking_Linux : [first byte]
+        end
         
         ReadSTDIN_NonBlocking_Linux --> InputBufferLinux : [unicode character(s)]
     end

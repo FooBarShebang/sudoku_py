@@ -9,8 +9,8 @@ Classes:
     SimpleMenuCLI
 """
 
-__version__ = "0.0.1.1"
-__date__ = "24-09-2018"
+__version__ = "0.0.1.2"
+__date__ = "02-10-2018"
 __status__ = "Development"
 
 #imports
@@ -231,11 +231,13 @@ class SimpleMenuCLI(object):
         while self.Status != DEF_OK_STATUS:
             self._show()
             strSelection = GetKeystroke()
-            strSelection = strSelection.lower()
-            if len(strSelection) > 1:
-                strSelection = 'Special key'
+            if (strSelection[0] in [u'\x1b', u'\x00', u'\xe0']) and (
+                                                        len(strSelection) > 1):
+                strSelection = 'Special key {}'.format(repr(strSelection))
             elif strSelection < u'\x20' or strSelection > u'\x7e':
-                strSelection = 'Not printable ASCII'
+                strSelection='Not printable ASCII {}'.format(repr(strSelection))
+            else:
+                strSelection = strSelection.lower()
             PrintFW(strSelection)
             time.sleep(DEF_CHOICE_SHOW_DELAY)
             if strSelection in self._dictOptions:

@@ -33,8 +33,8 @@ Functions:
         None -> unicode
 """
 
-__version__ = "0.0.1.1"
-__date__ = "27-09-2018"
+__version__ = "0.0.1.2"
+__date__ = "02-10-2018"
 __status__ = "Development"
 
 __all__ = ['ClearConsole', 'PrintFW', 'PrintLess', 'GetKeystroke']
@@ -81,7 +81,7 @@ def ClearConsole():
     bCond3 = strCurrentOS.startswith('CYGWIN')
     bCond4 = strCurrentOS == 'Windows'
     if bCond1 or bCond2 or bCond3:
-        sys.stdout.write('\033[H\033[J')
+        sys.stdout.write('\x1b[H\x1b[J')
     elif bCond4:
         iFault = os.system('cls')
         if iFault:
