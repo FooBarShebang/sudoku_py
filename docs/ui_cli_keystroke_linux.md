@@ -41,15 +41,15 @@ The potential problem is that the user may press some keys (even unintentionally
 
 ### References
 
-[^1] [Stackoverflow question 21791621](htts://stackoverflow.com/questions/21791621/)
+[^1] [Stackoverflow question 21791621](https://stackoverflow.com/questions/21791621/taking-input-from-sys-stdin-non-blocking)
 
-[^2] [Stackoverflow question 292095](htts://stackoverflow.com/questions/292095/)
+[^2] [Stackoverflow question 292095](https://stackoverflow.com/questions/292095/polling-the-keyboard-detect-a-keypress-in-python)
 
-[^3] [Stackoverflow question 2408560](htts://stackoverflow.com/questions/2408560/)
+[^3] [Stackoverflow question 2408560](https://stackoverflow.com/questions/2408560/python-nonblocking-console-input)
 
 [^4] [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892)
 
-[^5] [Stackoverflow question 18018033](htts://stackoverflow.com/questions/18018033/)
+[^5] [Stackoverflow question 18018033](https://stackoverflow.com/questions/18018033/how-to-stop-a-looping-thread-in-python)
 
 ## Design
 

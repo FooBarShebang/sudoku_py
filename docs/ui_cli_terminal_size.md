@@ -8,7 +8,7 @@
 
 ### References
 
-[^1] [Stackoverflow question 566746](htts://stackoverflow.com/questions/566746/)
+[^1] [Stackoverflow question 566746](https://stackoverflow.com/questions/566746/how-to-get-linux-console-window-width-in-python)
 
 ## Design
 
