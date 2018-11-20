@@ -1,0 +1,21 @@
+!define UI_CLI_TERMINAL_UTILS
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(terminal_utils) {
+    function(GetKeystroke)
+    
+    function(PrintLess)
+    
+    GetKeystroke <- PrintLess
+    
+    function(PrintFW)
+    
+    PrintLess -[hidden] PrintFW
+    
+    function(ClearConsole)
+    
+    PrintFW -[hidden] ClearConsole
+}

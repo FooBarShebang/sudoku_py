@@ -1,0 +1,11 @@
+!define UI_CLI_USER_MENUS
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(user_menus) {
+    class(MainMenu)
+    
+    class(HelpMenu)
+}

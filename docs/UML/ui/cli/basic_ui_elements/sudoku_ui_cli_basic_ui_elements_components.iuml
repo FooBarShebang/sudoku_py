@@ -1,0 +1,9 @@
+!define UI_CLI_BASIC_UI_ELEMENTS
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(basic_ui_elements) {
+    class(SimpleMenuCLI)
+}

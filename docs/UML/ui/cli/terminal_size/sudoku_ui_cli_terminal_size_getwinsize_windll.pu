@@ -1,0 +1,33 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_windll
+
+title Activity Diagram of the Function ui.cli._GetWinSize_windll()
+
+start
+
+if (package <b>ctypes</b> has sub-package <b>windll</b> ?) then (True)
+    if (in <b>try:</b> closure) then (no exceptions)
+        :get <b>stderr</b> stream handle <b>Handle = ctypes.windll.kernel32.GetStdHandle(-12)</b> ;
+        
+        :create a buffer <b>Buffer = ctypes.create_string_buffer(22)</b> ;
+        
+        :get console info <b>Temp = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(objHandle, cstrBuffer)</b> ;
+        
+        if (<b>Temp</b> is not None) then (Yes)
+            :extract coordinates <b>(_, _, _, _, _, iLeft, iTop, iRight, iBottom, _, _) = struct.unpack("hhhhHhhhhhh", cstrBuffer.raw)</b> ;
+            
+            :<b>Result = (iRight - iLeft + 1, iBottom - iTop + 1)</b> ;
+        else (No)
+            :<b>Result</b> = None;
+        endif
+    else (exception is raised)
+        :<b>Result</b> = None;
+    endif
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

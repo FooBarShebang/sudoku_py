@@ -2,7 +2,7 @@
 
 ## Goals
 
-This module implements the Microsoft Windows specific keyboard listener, which should detect a keyboard`s key press event and return a string (unicode) representation of the pressed key. This module is complementary to the POSIX keystroke listener implementation (see [documentation](./ui_cli_keystroke_linux.md)), as it is defined in the problem analysis for the ui.cli.terminal_utils module (see [documentation](./ui_cli_terminal_utils.md))
+This module implements the Microsoft Windows specific keyboard listener, which should detect a keyboard`s key press event and return a string (unicode) representation of the pressed key. This module is complementary to the POSIX keystroke listener implementation (see [documentation](./ui_cli_keystroke_linux.md)), as it is defined in the problem analysis for the *ui.cli.terminal_utils* module (see [documentation](./ui_cli_terminal_utils.md))
 
 The expected *modus operandi* is that a CLI user interface element (menu, dialog, etc.) will wait for the user input (key press) and perform some action afterwards based on the user input. Therefore, the process of the keyboard listening may be blocking. Such an UI element will expect either a Latin letter (small or capital, no diacritic signs) or a number entered by the user as the choice of an item / option. Thus, for instance, Shift+'1' keypress (resulting in the '!' character with English QWERTY layout) is not a valid input, which should be clearly differentiated from the plain '1' key press. In short, the result returned by the keyboard listener should be identical to the situation when a single character is entered via **stdin** (using **raw_input**() function), but without the necessity to finish the input with the Enter key. This also means that a letter key press using non-English keyboard layout may result in a different character being returned.
 
@@ -16,7 +16,7 @@ The expected *modus operandi* is that a CLI user interface element (menu, dialog
 
 ## Problem Analysis
 
-The internet search quickly revealed that the easiest and the most reliable way is to use the MS Windows specific module **msvcrt** and the function **getch**() from it. A fine example of this approach can be found at [^1].
+The internet search quickly revealed that the easiest and the most reliable way is to use the MS Windows specific module **msvcrt** and the function **getch**() from it. A fine example of this approach can be found at <a id="bref1">[<sup>1</sup>](#ref1)</a>.
 
 Futher analysis and experimentation revealed that the function **getwch**() from the same module suits better, since it returns the Unicode input (e.g. Cyrillic leter) as a single unicode character, already in the u'\uxxxx' form, even though the Windows` console itself cannot properly display it (as tested on Windows 8 and 10). The control codes (specal keys, like cursor or F1) are still generated as two ASCII bytes with the first one being '\x00' or '\xe0', so the second byte is to be read explicitely.
 
@@ -24,17 +24,17 @@ Futher analysis and experimentation revealed that the function **getwch**() from
 
 ### References
 
-[^1]: [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892)
+<a id="ref1">[1]</a>: [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892) [&#x2B0F;](#bref1)
 
 ## Design
 
 The module implements a single class with a single class method, thus there is no need to instantiate it. Furthermore, this class is intended to be used as a singleton.
 
-![Class diagram of the module](./UML/ui/cli/keystroke_windows_py/class_diagram.png)
+![Class diagram of the module](./UML/ui/cli/keystroke_windows/sudoku_ui_cli_keystroke_windows_classes.png)
 
 The class method **KeyboardListenerWindows.GetKeystroke**() is blocking. It loops until a keypress event is registered, see **msvcrt.kbhit**(). After a keypress event is detected, it reads a wide character from the input using **msvcrt.getwch**(). If the read character is 'u\x00' or u'\xe0' - the second character is read out and appended to the first.
 
-![Activity Diagram of KeyboardListenerWindows.GetKeystroke() Method](./UML/ui/cli/keystroke_windows_py/KeyboardListenerWindows_GetKeystroke()_Activity.png)
+![Activity Diagram of KeyboardListenerWindows.GetKeystroke() Method](./UML/ui/cli/keystroke_windows/sudoku_ui_cli_keystroke_windows_keyboardlistenerwindows_getkeystroke.png)
 
 ## Usage
 

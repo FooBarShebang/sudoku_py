@@ -1,0 +1,9 @@
+!define UI
+
+!ifndef COMPONENTS
+!include ../Templates/Components.cuml
+!endif
+
+package(ui) {
+    package(cli)
+}

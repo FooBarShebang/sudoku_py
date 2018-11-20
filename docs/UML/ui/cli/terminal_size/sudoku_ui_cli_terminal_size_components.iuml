@@ -1,0 +1,9 @@
+!define UI_CLI_TERMINAL_SIZE
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(terminal_size) {
+    function(GetTerminalSize)
+}

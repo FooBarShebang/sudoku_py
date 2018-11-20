@@ -1,0 +1,15 @@
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(keystroke_linux) {
+    function(ReadSTDIN_NonBlocking_Linux)
+    
+    class(InputBufferLinux)
+    
+    InputBufferLinux <-- ReadSTDIN_NonBlocking_Linux
+    
+    class(KeyboardListenerLinux)
+    
+    InputBufferLinux *-- KeyboardListenerLinux
+}

@@ -1,0 +1,115 @@
+@startuml sudoku_ui_cli_keystroke_linux_readstdin_nonblocking_linux
+
+title Activity Diagram of the Function ReadSTDIN_NonBlocking_Linux()
+
+start
+
+:<b>InputBuffer</b> - InputBufferLinux instance, data exchange buffer
+<b>Stopper</b> - threading.Event instance, object to stop the thread<
+
+while (try clause)
+    if (no exceptions?) then (True)
+        :get <b>stdin</b> descriptor -> <b>FileDescr</b> ;
+        
+        :get console settings using termios.tcgetattr() and <b>FileDescr</b> -> <b>OldSettings</b>;
+        
+        :set console into 'raw' mode using tty.setraw() and <b>FileDescr</b> ;
+        
+        while (while <b>Stopper</b> is not set) is (True)
+            :check **stdin** on data available using select.select();
+            
+            if (data available?) then (True)
+                :read 1 byte as stdin.read(1) -> <b>Char</b> <
+                
+                if (<b>Char</b> == '\x1b'?) then (True)
+                    :set <b>Flag</b> to True;
+                    
+                    while (while <b>Flag</b> is True)
+                        :read 1 byte from <b>stdin</b> -> <b>NewChar</b> <
+                        
+                        if (<b>NewChar</b> == '\x1b'?) then (True)
+                            :<b>Char</b> = <b>NewChar</b> ;
+                        elseif (<b>Char</b> == '\x1b'\nAND\n<b>NewChar</b> in ['[', 'O']?) then (True)
+                            :<b>Char</b> += <b>NewChar</b> ;
+                        elseif (<b>Char</b> == '\x1bO'?) then (True)
+                            if (<b>NewChar</b> <= '\x7f'?) then (Yes)
+                                :<b>Char</b> += <b>NewChar</b> ;
+                            else (No)
+                                :<b>Char</b> = <b>NewChar</b> ;
+                            endif
+                            
+                            :set <b>Flag</b> to False;
+                        elseif (<b>Char</b> == '\x1b['?) then (True)
+                            if (<b>NewChar</b> > '\x7f'?) then (Yes)
+                                :set <b>Flag</b> to False;
+                                
+                                :<b>Char</b> = <b>NewChar</b> ;
+                            elseif (<b>NewChar</b> in '1'..'8'?) then (Yes)
+                                :set <b>Flag</b> to False;
+                                
+                                :<b>Char</b> += <b>NewChar</b> ;
+                            else (No)
+                                :<b>Char</b> += <b>NewChar</b> ;
+                            endif;
+                        elseif (len(<b>Char</b>) > 3?) then (True)
+                            if (<b>NewChar</b> == '~'?) then (Yes)
+                                :set <b>Flag</b> to False;
+                                
+                                :<b>Char</b> += <b>NewChar</b> ;
+                            elseif (<b>NewChar</b> in '10'..'9'?) then (Yes)
+                                :<b>Char</b> += <b>NewChar</b> ;
+                            else (No)
+                                :set <b>Flag</b> to False;
+                                
+                                :<b>Char</b> = <b>NewChar</b> ;
+                            endif
+                        else (False)
+                            :set <b>Flag</b> to False;
+                                
+                            :<b>Char</b> = <b>NewChar</b> ;
+                        endif
+                        if (<b>Char</b> starts with '\x1b'?) then (True)
+                            :send sequence as bytes packed into a unicode string to buffer>
+                        else (False)
+                            :set <b>Flag</b> to True;
+                            
+                            while (while <b>Flag</b> is True)
+                                :try to decode <b>Char</b> into a unicode character using UTF-8;
+                                
+                                if (UnicodeDecodeError raised?) then (Yes)
+                                    :read 1 byte from <b>stdin</b> <
+                                    
+                                    :append to <b>Char</b>;
+                                else (No)
+                                    :set <b>Flag</b> to False;
+                                endif
+                                
+                                if (len(<b>Char</b>) > 4? and <b>Flag</b> == False?) then (Yes)
+                                    :remove the first byte <b>Char -> Char</b>[1:];
+                                endif
+                            end while
+                            
+                            :send decoded unicode character to buffer>
+                        endif
+                    end while
+                endif
+            endif
+        end while (False)
+    else (any exception)
+        :do nothing;
+    endif
+end while (finally)
+
+while (try clause)
+    if (no exceptions?) then (True)
+        :get <b>stdin</b> descriptor -> <b>FileDescr</b> ;
+        
+        :restore console settings using termios.tcsetattr() <b>FileDescr</b> and <b>OldSettings</b> ;
+    else (any exception)
+        :do nothing;
+    endif
+end while
+
+stop
+
+@enduml

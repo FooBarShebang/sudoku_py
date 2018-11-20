@@ -1,9 +1,0 @@
-@startuml
-
-title Class Diagram of the Module\nsudoku_py.ui.cli.keystroke_windows
-
-!ifndef UI_CLI_KEYSTROKE_WINDOWS_KEYBOARDLISTENERWINDOWS
-!include ./KeyboardListenerWindows.iuml
-!endif
-
-@enduml

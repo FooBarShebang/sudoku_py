@@ -1,0 +1,25 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_posix
+
+title Activity Diagram of the Function ui.cli._GetWinSize_POSIX()
+
+start
+
+:<b>Result</b> = _GetWinSize_ioctl()|
+
+if (<b>Result</b> is None?) then (True)
+    :<b>Result</b> = _GetWinSize_stty()|
+    
+    if (<b>Result</b> is None?) then (True)
+        :<b>Result</b> = _GetWinSize_tput()|
+        
+        if (<b>Result</b> is None?) then (True)
+            :<b>Result</b> = _GetWinSize_curses()|
+        endif
+    endif
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

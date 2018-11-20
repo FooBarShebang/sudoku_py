@@ -1,0 +1,23 @@
+@startuml sudoku_ui_cli_terminal_size_getterminalsize
+
+title Activity Diagram of the Function ui.cli.GetTerminalSize()
+
+start
+
+if (<b>platform.system()</b> is 'Linux' OR 'Darwin' OR 'CYGWIN'?) then (True)
+    :<b>Result</b> = _GetWinSize_POSIX()|
+elseif (<b>platform.system()</b> is 'Windows'?) then (True)
+    :<b>Result</b> = _GetWinSize_MSWIN()|
+else (False)
+    :<b>Result</b> = _GetWinSize_os_environ()|
+endif
+
+if (<b>Result</b> is None?) then (Yes)
+    :<b>Result</b> = _GetWinSize_default(), i.e. the values of the global module constants]
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

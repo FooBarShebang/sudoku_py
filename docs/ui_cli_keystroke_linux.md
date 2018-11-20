@@ -2,7 +2,7 @@
 
 ## Goals
 
-This module implements the POSIX OS (e.g., LInux) specific keyboard listener, which should detect a keyboard`s key press event and return a string (unicode) representation of the pressed key. This module is complementary to the MS Winsdows keystroke listener implementation (see [documentation](./ui_cli_keystroke_windows.md)), as it is defined in the problem analysis for the ui.cli.terminal_utils module (see [documentation](./ui_cli_terminal_utils.md))
+This module implements the POSIX OS (e.g., LInux) specific keyboard listener, which should detect a keyboard`s key press event and return a string (unicode) representation of the pressed key. This module is complementary to the MS Winsdows keystroke listener implementation (see [documentation](./ui_cli_keystroke_windows.md)), as it is defined in the problem analysis for the **ui.cli.terminal_utils** module (see [documentation](./ui_cli_terminal_utils.md)).
 
 The expected *modus operandi* is that a CLI user interface element (menu, dialog, etc.) will wait for the user input (key press) and perform some action afterwards based on the user input. Therefore, the process of the keyboard listening may be blocking. Such an UI element will expect either a Latin letter (small or capital, no diacritic signs) or a number entered by the user as the choice of an item / option. Thus, for instance, Shift+'1' keypress (resulting in the '!' character with English QWERTY layout) is not a valid input, which should be clearly differentiated from the plain '1' key press. In short, the result returned by the keyboard listener should be identical to the situation when a single character is entered via **stdin** (using **raw_input**() function), but without the necessity to finish the input with the Enter key. This also means that a letter key press using non-English keyboard layout may result in a different character being returned.
 
@@ -24,11 +24,11 @@ Upon internet search the popular solutions are:
 
 The last option is unacceptable, because the design choice for the whole project is to minimize the dependence on the third party packages and to use only the standard library functionality as much as possible. The second option, technically, is not more elegant or simple as the first one, so the first option has been chosen.
 
-The main obstacle is that in the usual mode the input from the **stdin** is not available, until the Enter key is pressed. Thus, even if a single (letter or number) key is pressed, and the corresonding character is sent to **stdin**, it cannot be read out until the Enter key is pressed. In other words, exactly as with the **raw_input**() function. The walk-around is to put the console into the 'raw' mode (using **tty** or **fcntl** modules), read the first byte in the buffer of the **stdin** and set the console back to the 'usual' (cbreak) mode, see References [^1] to [^4]. It is absolutely imperative to put the console back into the cbreak mode, otherwise the console output will be 'broken'. Basically, the '\n' (LF) character issued, for instance, by the **print** statement after the printed symbols will only move the console cursor to the next line, but it will not move it left to the beginning of the line. Thus, the explicit issue of the '\r' (CR) character will be required before each new line.
+The main obstacle is that in the usual mode the input from the **stdin** is not available, until the Enter key is pressed. Thus, even if a single (letter or number) key is pressed, and the corresonding character is sent to **stdin**, it cannot be read out until the Enter key is pressed. In other words, exactly as with the **raw_input**() function. The walk-around is to put the console into the 'raw' mode (using **tty** or **fcntl** modules), read the first byte in the buffer of the **stdin** and set the console back to the 'usual' (cbreak) mode, see References <a id="bref1">[<sup>1</sup>](#ref1)</a> to [<sup>4</sup>](#ref4). It is absolutely imperative to put the console back into the cbreak mode, otherwise the console output will be 'broken'. Basically, the '\n' (LF) character issued, for instance, by the **print** statement after the printed symbols will only move the console cursor to the next line, but it will not move it left to the beginning of the line. Thus, the explicit issue of the '\r' (CR) character will be required before each new line.
 
-The other problem with this approach is that the **sys.stdin.read(1)** call will block the execution of the program if the **stdin** buffer is currently empty until it receives at least one byte. There is a way to overcome this blocking by periodically asking the **stdin** if it has anything in its bufer (using **select.select**(), see References [^1] to [^4]) before attempting to read from it. In between the checks on the data availability some useful activity may be performed.
+The other problem with this approach is that the **sys.stdin.read(1)** call will block the execution of the program if the **stdin** buffer is currently empty until it receives at least one byte. There is a way to overcome this blocking by periodically asking the **stdin** if it has anything in its bufer (using **select.select**(), see References [<sup>1</sup>](#ref1) to [<sup>4</sup>](#ref4)) before attempting to read from it. In between the checks on the data availability some useful activity may be performed.
 
-Even better approach is to put the function listening the **stdin** into a separate thread (Reference [^2]), which will populate some buffer, whereas another function (in the main thread) will periodically check that buffer and take input from it. As soon as the required user input (keystrokes) is obtained, the **stdin** listening process can be stopped by sending an event (Reference [^5]) or directly setting some flag variable visible to the listening thread even if the buffer is not depleated. The advantage of this approach is that the keyboard listening becomes asynchrous and non-blocking. Therefore, it is selected for the implementation.
+Even better approach is to put the function listening the **stdin** into a separate thread <a id="bref2">[<sup>2</sup>](#ref2)</a>, which will populate some buffer, whereas another function (in the main thread) will periodically check that buffer and take input from it. As soon as the required user input (keystrokes) is obtained, the **stdin** listening process can be stopped by sending an event <a id="bref3">[<sup>5</sup>](#ref5)</a> or directly setting some flag variable visible to the listening thread even if the buffer is not depleated. The advantage of this approach is that the keyboard listening becomes asynchrous and non-blocking. Therefore, it is selected for the implementation.
 
 During the implementation and testing on Linux Mint (19, Mate edition, 64 bit) two effects have been found:
 
@@ -41,35 +41,35 @@ The potential problem is that the user may press some keys (even unintentionally
 
 ### References
 
-[^1] [Stackoverflow question 21791621](https://stackoverflow.com/questions/21791621/taking-input-from-sys-stdin-non-blocking)
+<a id="ref1">[1]</a> [Stackoverflow question 21791621](https://stackoverflow.com/questions/21791621/taking-input-from-sys-stdin-non-blocking) [&#x2B0F;](#bref1)
 
-[^2] [Stackoverflow question 292095](https://stackoverflow.com/questions/292095/polling-the-keyboard-detect-a-keypress-in-python)
+<a id="ref2">[2]</a> [Stackoverflow question 292095](https://stackoverflow.com/questions/292095/polling-the-keyboard-detect-a-keypress-in-python) [&#x2B0F;](#bref2)
 
-[^3] [Stackoverflow question 2408560](https://stackoverflow.com/questions/2408560/python-nonblocking-console-input)
+<a id="ref3">[3]</a> [Stackoverflow question 2408560](https://stackoverflow.com/questions/2408560/python-nonblocking-console-input) [&#x2B0F;](#bref1)
 
-[^4] [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892)
+<a id="ref4">[4]</a> [MagMax at GitHub](https://github.com/magmax/python-readchar) . Original authors are [Danny Yo & Stephen Chappel at code.activestate.com](http://code.activestate.com/recipes/134892) [&#x2B0F;](#bref1)
 
-[^5] [Stackoverflow question 18018033](https://stackoverflow.com/questions/18018033/how-to-stop-a-looping-thread-in-python)
+<a id="ref5">[5]</a> [Stackoverflow question 18018033](https://stackoverflow.com/questions/18018033/how-to-stop-a-looping-thread-in-python) [&#x2B0F;](#bref3)
 
 ## Design
 
 The module implements one function and two classes (see figure below). The function is executed in a separate (from the main) thread. It listens to the **stdin** and accumulates the data one byte at a time until a proper byte sequence is accumulated, which can be converted into a unicode character or sent as CSI or SS3 sequence within a unicode string to a buffer object. This buffer object is shared by the main and the secondary threads and it is implemented as a custom class. The buffer always store data as a unicode string, which contains either a single proper unicode character in the u'\uxxxx' form (including ASCII characters) or a single CSI / SS3 sequence stored as it is (hex-codes). Any new input from the listening function purges the previously stored data and resets the data timer. The data in the buffer has a limited lifetime buffer; the expired data is deleted and never returned to the 'caller'. The second class implements a 'user interface' to the buffer object, which waits until any data is available in the buffer (blocking) and then retrieves the content of the buffer.
 
-![components diagram](./UML/ui/cli/keystroke_linux_py/components_diagram.png)
+![components diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_components.png)
 
 The class diagram of the module is given below.
 
-![class diagram](./UML/ui/cli/keystroke_linux_py/class_diagram.png)
+![class diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_classes.png)
 
 The 'user interface' class **KeyboardListenerLinux** is responsible for the creation of an instance of the buffer class **InputBufferLinux**, the second execution thread and the 'stopper event' object (to contol the second thread) upon own instantiation. It is also responsible for the proper termination of the second thread upon own 'destruction', whereas the buffer object and the 'stopper event' object are left to the automatic garbage collection mechanism to take care of. An UML sequence diagram (see below) is not designed for the multi-threading processes, still it illustrates the main aspects of the interaction between the involved objects.
 
-![sequence diagram](./UML/ui/cli/keystroke_linux_py/sequence_diagram.png)
+![sequence diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_sequence.png)
 
 The first important point is that a user could press a key on the keyboard even before the initiation of the keyboard listening (e.g. 'laggy' CLI-based UI) or at any time after that. The keyboard listener (from the 'user interface' part) is blocking; it doesn't return / stop until any keystroke is registered, but it doesn't listen to the **stdin** directly - only checks if any data is available in the buffer, which is populated *asynchronously* from another thread.
 
 The activity diagram below shows the interaction between the threads. It is an abstraction related to the 'user perspective' since, actually, only two threads are involved, not three as in the Diagram. However, the buffer object (middle) is shared by the both threads: the main ('user interface', left) and the secondary ('listener', right). The 'put' event from the secondary thread and the 'get' event from the main thread are *asynchronous*. Thus, 3 processes abstraction is an approximation of the 'racing' condition between the two threads with a shared data exchange object.
 
-![main activity diagram](./UML/ui/cli/keystroke_linux_py/keystroke_request_activity_diagram.png)
+![main activity diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_keystroke_request.png)
 
 The activity diagram of the **stdin** listening function ReadSTDIN_NonBlocking_Linux() is shown below. Note that it 'remembers' the original configuration (settings) of the console upon the creation of the thread (entrance to the function) and, at least, tries to restore the original settings during the termination of the thread, which can occur either by setting the stopper event object into the 'set' state (normal termination) or if any exception has occured within the scope of the try clause. Note that the restoration of the original settings within the 'finally' clause is itself placed into another 'try clause'. Thus the restoration of the console configuration is not quaranteed if the **stdin** descriptor cannot be obtained.
 
@@ -84,37 +84,37 @@ This listener function implements own internal buffer, into which the input from
 * The supposed encoded unicode character byte sequence is tested with each accumulated byte on if it can be already decoded - minimum encoding length principle, and a new byte is read out from the **stdin** only if the current sequence cannot be decoded
 * The length of the UTF-8 encoded unicode character cannot exceed 4 bytes. As soon as the length of the sequence reaches 5, the first byte in the sequence is discarded.
 
- ![ReadSTDIN_NonBlocking_Linux() activity diagram](./UML/ui/cli/keystroke_linux_py/listener_activity.png)
+ ![ReadSTDIN_NonBlocking_Linux() activity diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_readstdin_nonblocking_linux.png)
 
 The buffer class **InputBufferLinux** has two public instance methods: **put**() and **get**() - to place the data into the buffer and to retrieve it from the buffer respectively. It also implements a read-only property **IsReady** with the boolean value - if any data can be retrieved from the buffer, and two helper 'private' methods.
 
 The property **IsReady** (see figure below) checks the data timer and purges the output buffer if the timer has expired. Then, if the output buffer still contains data the True value is returned, otherwise - False.
 
-![InputBufferLinux.IsReady activity diagram](./UML/ui/cli/keystroke_linux_py/IsReady_activity.png)
+![InputBufferLinux.IsReady activity diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_inputbufferlinux_isready.png)
 
 The public instance method **get**(), at first, checks the data timer and purges the output buffer if the timer has expired. If the output buffer still contains data, this data is returned and the output buffer is cleared out. Otherwise the value None is returned.
 
-![InputBufferLinux.get() activity diagram](./UML/ui/cli/keystroke_linux_py/get_activity.png)
+![InputBufferLinux.get() activity diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_inputbufferlinux_get.png)
 
 The public instance method **put**() is called from the secondary thread, which listens to the **stdin**, as soon as a proper input data in the **stdin** is available. It deletes the previously stored data, copies the new data into the buffer and resets the data timer.
 
-![InputBufferLinux.put() activity diagram](./UML/ui/cli/keystroke_linux_py/put_activity.png)
+![InputBufferLinux.put() activity diagram](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_inputbufferlinux_put.png)
 
 The 'user interface' class **KeyboardListenerLinux** has one public instance method **GetKeystroke**(), initialization and destruction methods.
 
 The initialization method creates instances of the **InputBufferLinux**, **treading.Event** and **threading.Thread** classes and starts the listener function in a separate thread.
 
-![KeyboardListenerLinux initialization](./UML/ui/cli/keystroke_linux_py/kll_initialization.png)
+![KeyboardListenerLinux initialization](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux_init.png)
  
  The 'destructor' method of this class checks if the listening thread is alive. If the thread is alive, it sets the stopper event object, which must stop the **stdin** listening as soon as the last unfinished input sequence is complete, or 'immediately', if there is no pending input. Then it waits for the tread to finish and join the main thread.
  
  The listener thread object is 'deleted'.
  
- ![KeyboardListenerLinux destruction](./UML/ui/cli/keystroke_linux_py/kll_destruction.png)
+ ![KeyboardListenerLinux destruction](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux_del.png)
  
  The **GetKeystroke** method runs in a loop until it can copy a keystroke from the buffer object. It calls the method **InputBufferLinux.get**(). If the returned value is not None, the method exits the loop and return this value. Otherwise, it waits for the twice amount of time as defined by the module global variable DEF_TIME_DELAY before making the new call to **InputBufferLinux.get**().
  
- ![KeyboardListenerLinux destruction](./UML/ui/cli/keystroke_linux_py/kll_GetStroke.png)
+ ![KeyboardListenerLinux destruction](./UML/ui/cli/keystroke_linux/sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux_getkeystroke.png)
 
 ### Remaining Issues
 

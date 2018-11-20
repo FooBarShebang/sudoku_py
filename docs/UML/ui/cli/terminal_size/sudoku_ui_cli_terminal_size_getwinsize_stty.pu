@@ -1,0 +1,33 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_stty
+
+title Activity Diagram of the Function ui.cli._GetWinSize_stty()
+
+start
+
+if (<b>platform.system()</b> is 'Linux' OR 'Darwin' OR 'CYGWIN'?) then (True)
+    if (in <b>try:</b> closure) then (no exceptions)
+        :execute CLI command and capture its output\n<b>Temp=map(int, subprocess.check_output(['stty', 'size']).split())</b> ;
+        
+        :<b>Result = (Temp[1], Temp[0])</b> ;
+    else (exception is raised)
+        if (in <b>try:</b> closure) then (no exceptions)
+            :explicitely open '/dev/tty' stream as <b>tty = open('/dev/tty')</b>;
+            
+            :execute CLI command and capture its output\n<b>Temp=map(int, subprocess.check_output(['stty', 'size'], stdin = tty).split())</b> ;
+            
+            :close <b>tty</b> stream;
+            
+            :<b>Result = (Temp[1], Temp[0])</b> ;
+        else (exception is raised)
+            :<b>Result</b> = None;
+        endif
+    endif
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

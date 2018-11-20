@@ -1,0 +1,25 @@
+@startuml sudoku_ui_cli_keystroke_linux_classes
+
+title Class Diagram of the Module ui.cli.keystroke_linux
+
+namespace threading {
+    class Event
+    
+    class Thread
+}
+
+!ifndef UI_CLI_KEYSTROKE_LINUX_KEYBOARDLISTENERLINUX
+!include ./sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux.iuml
+!endif
+
+!ifndef UI_CLI_KEYSTROKE_LINUX_INPUTBUFFERLINUX
+!include ./sudoku_ui_cli_keystroke_linux_inputbufferlinux.iuml
+!endif
+
+threading.Event "1" *-- "1" KeyboardListenerLinux
+
+threading.Thread "1" *-- "1" KeyboardListenerLinux
+
+KeyboardListenerLinux "1" -* "1" InputBufferLinux 
+
+@enduml

@@ -1,0 +1,29 @@
+!define UI_CLI
+
+!ifndef COMPONENTS
+!include ../../Templates/Components.cuml
+!endif
+
+package(cli) {
+    module(user_menus, cli_user_menus)
+    
+    module(basic_ui_elements, cli_basic_ui_elements)
+    
+    cli_user_menus --> cli_basic_ui_elements
+    
+    module(terminal_utils)
+    
+    cli_basic_ui_elements --> terminal_utils
+    
+    module(terminal_size)
+    
+    module(keystroke_windows)
+    
+    module(keystroke_linux)
+    
+    terminal_utils --> terminal_size
+    
+    terminal_utils --> keystroke_windows
+    
+    terminal_utils --> keystroke_linux
+}

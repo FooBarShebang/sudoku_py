@@ -1,0 +1,29 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_curses
+
+title Activity Diagram of the Function ui.cli._GetWinSize_curses()
+
+start
+
+if ('curses' module is available?) then (True)
+    if (in <b>try:</b> closure) then (no exceptions)
+        :create a frame <b>curses.initscr() -> Frame</b> ;
+        
+        :get its size <b>Height, Width = Frame.getmaxyx()</b> ;
+        
+        :close frame session <b>curses.endwin()</b>;
+        
+        :delete <b>Frame</b> ;
+        
+        :<b>Result = (Width, Height)</b> ;
+    else (exception is raised)
+        :<b>Result</b> = None;
+    endif
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

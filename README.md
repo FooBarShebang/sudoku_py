@@ -26,11 +26,11 @@ The interaction with the user is planned to be implemented with CLI (console) as
 
 ## Documentation
 
-The documenation is written in the form of the text files using Markdown format, and it is organized in the hierarhy mirroring the source code modules / packages structure. The entire documentation is placed within the **docs** folder.
+The documenation is written in the form of the text files using Markdown format, and it is organized in the hierarhy mirroring the source code modules / packages structure. The entire documentation is placed within the [**docs**](./docs/index.md) folder.
 
 * **core**
-* **ui**
-  - **cli**
+* [**ui**](./docs/ui.md)
+  - [**cli**](./docs/ui_cli.md)
     + basic_ui_elements.py
     + [keystroke_linux.py](./docs/ui_cli_keystroke_linux.md)
     + [keystroke_windows.py](./docs/ui_cli_keystroke_windows.md)

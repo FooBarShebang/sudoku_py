@@ -1,0 +1,23 @@
+@startuml sudoku_components
+
+title Components Diagram of the Library sudoku_py
+
+!ifndef COMPONENTS
+!include ./Templates/Components.cuml
+!endif
+
+!ifndef UI
+!include ./ui/sudoku_ui_components.iuml
+!endif
+
+folder resources {
+    folder cli as f_cli {
+        file("JSON configurations")
+    }
+}
+
+package(core)
+
+module(sudoku_py_cli)
+
+@enduml

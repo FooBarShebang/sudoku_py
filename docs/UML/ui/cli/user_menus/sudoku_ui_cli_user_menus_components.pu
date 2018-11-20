@@ -1,0 +1,23 @@
+@startuml sudoku_ui_cli_user_menus_components
+
+title Components Diagram of the Module ui.cli.user_menus
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+!ifndef UI_CLI_BASIC_UI_ELEMENTS
+!include ../basic_ui_elements/sudoku_ui_cli_basic_ui_elements_components.iuml
+!endif
+
+module(user_menus) {
+    class(MainMenu)
+    
+    class(HelpMenu)
+}
+
+SimpleMenuCLI <|--- MainMenu
+
+SimpleMenuCLI <|--- HelpMenu
+
+@enduml

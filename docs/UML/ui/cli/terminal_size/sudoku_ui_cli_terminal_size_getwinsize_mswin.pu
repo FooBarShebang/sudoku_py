@@ -1,0 +1,17 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_mswin
+
+title Activity Diagram of the Function ui.cli._GetWinSize_MSWIN()
+
+start
+
+:<b>Result</b> = _GetWinSize_windll()|
+
+if (<b>Result</b> is None?) then (True)
+    :<b>Result</b> = _GetWinSize_tput()|
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

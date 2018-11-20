@@ -1,0 +1,19 @@
+@startuml sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux_init
+
+title Activity Diagram of the KeyboardListenerLinux Initialization
+
+start
+
+:initialize <b>InputBufferLinux</b> class as <b>InputBuffer</b> attribute;
+
+:initialize <b>threading.Event</b> class as <b>objStopper</b> attribute;
+
+:create a listening thread (<b>threading.Thread</b> instance) as <b>InputThread</b> attribute;
+
+:set the created thread in the 'daemon' mode;
+
+:run the listener function in this thread using stopper and buffer objects as arguments;
+
+stop
+
+@enduml

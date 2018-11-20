@@ -1,0 +1,9 @@
+!define UI_CLI_KEYSTROKE_WINDOWS
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(keystroke_windows) {
+    class(KeyboardListenerWindows)
+}

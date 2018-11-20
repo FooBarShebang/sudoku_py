@@ -1,0 +1,68 @@
+@startuml sudoku_ui_cli_user_menus_states
+
+title States Diagram of the CLI Menus and Dialogues
+
+state "Main Menu" as State1
+State1: New game
+State1: Load game
+State1: Solve puzzle
+State1: Make user puzzle
+State1: Display help
+State1: Show high scores
+
+state "New Game Menu" as State2
+State2: Select difficulty
+State2: Select size
+State2: Start
+State2: Back
+
+state "Load Game Menu" as State3
+State3: Select difficulty
+State3: Select size
+State3: Proceed
+State3: Back
+
+state "Solve Puzzle Sequence" as State4 {
+    state "Size selection" as State4_1
+    
+    state "'Load existing?' Dialogue" as State4_2
+    
+    [*] --> State4_1
+    
+    State4_1 --> State4_2
+}
+
+state "Help Menu" as State5
+State5: Rules
+State5: How to play
+State5: Back
+
+[*] -> State1 : application run()
+
+State1 --> State1 : wrong input
+
+State1 --> [*] : onExit()
+
+State1 --> State2 : onNewGame()
+
+State2 --> State1 : onBack()
+
+State2 --> State2 : wrong input
+
+State1 --> State3 : onLoadGame()
+
+State3 --> State1 : onBack()
+
+State3 --> State3 : wrong input
+
+State1 --> State4 : onSolvePuzzle()
+
+State4 --> State1 : onBack()
+
+State1 --> State5 : onHelp()
+
+State5 --> State1 : onBack()
+
+State5 --> State5 : wrong input
+
+@enduml

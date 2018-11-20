@@ -1,0 +1,13 @@
+@startuml sudoku_ui_components
+
+title Components Diagram of the Package ui
+
+!ifndef COMPONENTS
+!include ../Templates/Components.cuml
+!endif
+
+!ifndef UI_CLI
+!include ./cli/sudoku_ui_cli_components.iuml
+!endif
+
+@enduml

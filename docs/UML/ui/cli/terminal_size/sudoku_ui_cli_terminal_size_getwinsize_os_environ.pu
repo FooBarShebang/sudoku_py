@@ -1,0 +1,17 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_os_environ
+
+title Activity Diagram of the Function ui.cli._GetWinSize_os_environ()
+
+start
+
+if (dictionary <b>os.environ</b> has keys 'LINES' and 'COLUMNS' ?) then (True)
+    :<b>Result = (os.environ['COLUMNS'], os.environ['LINES'])</b> ;
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

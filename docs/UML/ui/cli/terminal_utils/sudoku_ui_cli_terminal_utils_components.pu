@@ -1,0 +1,61 @@
+@startuml sudoku_ui_cli_terminal_utils_components
+
+title Components Diagram of the Module ui.cli.terminal_utils
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+!ifndef UI_CLI_TERMINAL_SIZE
+!include ../terminal_size/sudoku_ui_cli_terminal_size_components.iuml
+!endif
+
+!ifndef UI_CLI_KEYSTROKE_WINDOWS
+!include ../keystroke_windows/sudoku_ui_cli_keystroke_windows_components.iuml
+!endif
+
+!ifndef UI_CLI_KEYSTROKE_LINUX
+!include ../keystroke_linux/sudoku_ui_cli_keystroke_linux_components.iuml
+!endif
+
+keystroke_linux -[hidden] terminal_size
+
+keystroke_linux -[hidden]-- keystroke_windows
+
+module(terminal_utils) {
+    function(GetKeystroke)
+    
+    function(PrintLess)
+    
+    GetKeystroke -[hidden] PrintLess
+    
+    function(PrintFW)
+    
+    PrintLess -[hidden] PrintFW
+    
+    function(ClearConsole)
+    
+    PrintFW -[hidden] ClearConsole
+    
+    function(_PrintPage)
+    
+    GetKeystroke <-- _PrintPage
+    
+    PrintLess --> _PrintPage
+    
+    function(_SplitString)
+    
+    PrintLess --> _SplitString
+    
+    PrintFW --> _SplitString
+}
+
+KeyboardListenerLinux <-- GetKeystroke
+
+KeyboardListenerWindows <- GetKeystroke
+
+GetTerminalSize <--- PrintLess
+
+GetTerminalSize <--- ClearConsole
+
+@enduml

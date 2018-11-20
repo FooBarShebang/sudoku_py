@@ -1,0 +1,23 @@
+@startuml sudoku_ui_cli_basic_elements_components
+
+title Components Diagram of the Module ui.cli.basic_ui_elements
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+!ifndef UI_CLI_TERMINAL_UTILS
+!include ../terminal_utils/sudoku_ui_cli_terminal_utils_components.iuml
+!endif
+
+module(basic_ui_elements) {
+    class(SimpleMenuCLI)
+}
+
+GetKeystroke <--- SimpleMenuCLI
+
+PrintFW <--- SimpleMenuCLI
+
+ClearConsole <--- SimpleMenuCLI
+
+@enduml

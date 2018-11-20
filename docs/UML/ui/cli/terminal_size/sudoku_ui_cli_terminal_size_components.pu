@@ -1,0 +1,73 @@
+@startuml sudoku_ui_cli_terminal_size_components
+
+title Components Diagram of the Module ui.cli.terminal_size
+
+!ifndef COMPONENTS
+!include ../../../Templates/Components.cuml
+!endif
+
+module(terminal_size) {
+    function(GetTerminalSize)
+    
+    function(_GetWinSize_MSWIN)
+    
+    function(_GetWinSize_POSIX)
+    
+    function(_GetWinSize_os_environ)
+    
+    function(_GetWinSize_default)
+    
+    GetTerminalSize --> _GetWinSize_MSWIN : calls
+    
+    GetTerminalSize --> _GetWinSize_POSIX : calls
+    
+    GetTerminalSize --> _GetWinSize_os_environ : calls
+    
+    GetTerminalSize --> _GetWinSize_default : calls
+    
+    function(_GetWinSize_windll)
+    
+    function(_GetWinSize_tput)
+    
+    _GetWinSize_MSWIN --> _GetWinSize_windll : calls
+    
+    _GetWinSize_MSWIN --> _GetWinSize_tput : calls
+    
+    _GetWinSize_POSIX --> _GetWinSize_tput : calls
+    
+    function(_GetWinSize_stty)
+    
+    function(_GetWinSize_ioctl)
+    
+    function(_GetWinSize_curses)
+    
+    _GetWinSize_POSIX --> _GetWinSize_stty : calls
+    
+    _GetWinSize_POSIX --> _GetWinSize_ioctl : calls
+    
+    _GetWinSize_POSIX --> _GetWinSize_curses : calls
+}
+
+package(ctypes.windll)
+
+_GetWinSize_windll --> ctypes.windll : WinAPI call
+
+module(subprocess)
+
+_GetWinSize_tput --> subprocess
+
+_GetWinSize_stty --> subprocess : CLI command execution
+
+module(termios)
+
+module(fcntl)
+
+_GetWinSize_ioctl --> termios
+
+_GetWinSize_ioctl --> fcntl : uses
+
+module(curses)
+
+_GetWinSize_curses --> curses : uses
+
+@enduml

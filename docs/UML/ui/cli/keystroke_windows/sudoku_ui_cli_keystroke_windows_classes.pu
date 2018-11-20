@@ -1,0 +1,9 @@
+@startuml sudoku_ui_cli_keystroke_windows_classes
+
+title Class Diagram of the Module\nsudoku_py.ui.cli.keystroke_windows
+
+!ifndef UI_CLI_KEYSTROKE_WINDOWS_KEYBOARDLISTENERWINDOWS
+!include ./sudoku_ui_cli_keystroke_windows_keyboardlistenerwindows.iuml
+!endif
+
+@enduml

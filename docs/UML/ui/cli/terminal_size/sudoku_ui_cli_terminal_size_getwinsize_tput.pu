@@ -1,0 +1,29 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_tput
+
+title Activity Diagram of the Function ui.cli._GetWinSize_tput()
+
+start
+
+if (<b>platform.system()</b> is 'Linux' OR 'Darwin' OR 'CYGWIN'?) then (True)
+    if (in <b>try:</b> closure) then (no exceptions)
+        :create a subprocess as <b>Process = subprocess.Popen(["tput", "cols"], stdin = subprocess.PIPE, stdout = subprocess.PIPE)</b> ;
+        
+        :get width as <b>Width = int(process.communicate(input = None)[0])</b> ;
+        
+        :create a subprocess as <b>Process = subprocess.Popen(["tput", "lines"], stdin = subprocess.PIPE, stdout = subprocess.PIPE)</b> ;
+        
+        :get height as <b>Height = int(process.communicate(input = None)[0])</b> ;
+        
+        :<b>Result = (Width, Height)</b> ;
+    else (exception is raised)
+        :<b>Result</b> = None;
+    endif
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

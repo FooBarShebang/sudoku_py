@@ -1,0 +1,21 @@
+@startuml sudoku_ui_cli_keystroke_linux_keyboardlistenerlinux_getkeystroke
+
+title Activity Diagram of the Method KeyboardListenerLinux.GetKeystroke()
+
+start
+
+while (while no data in the bufer)
+    :check the buffer **InputBuffer.get**();
+    
+    if (not None is get?) then (True)
+        :copy received data to <b>Result</b> ;
+    else (False)
+        :wait for 2 * DEF_TIME_DELAY;
+    endif
+end while
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

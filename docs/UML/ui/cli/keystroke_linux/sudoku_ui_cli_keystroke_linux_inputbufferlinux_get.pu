@@ -1,0 +1,21 @@
+@startuml sudoku_ui_cli_keystroke_linux_inputbufferlinux_get
+
+title Activity Diagram of the Method InputBufferLinux.get()
+
+start
+
+if (<b>IsReady</b>?) then (Yes)
+    :copy the content of the buffer to <b>Result</b> ;
+    
+    :purge the buffer;
+    
+    :reset the data timer;
+else (No)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

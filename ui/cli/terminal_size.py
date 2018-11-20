@@ -97,7 +97,6 @@ def _GetWinSize_curses():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     if 'curses' in sys.modules:
         try:
             objFrame = curses.initscr()
@@ -106,7 +105,9 @@ def _GetWinSize_curses():
             del objFrame
             itupResult = (iWidth, iHeight)
         except:
-            pass
+            itupResult = None
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_stty():
@@ -124,7 +125,6 @@ def _GetWinSize_stty():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     strCurrentOS = platform.system()
     bCond1 = strCurrentOS == 'Linux'
     bCond2 = strCurrentOS == 'Darwin'
@@ -141,7 +141,9 @@ def _GetWinSize_stty():
                                                         stdin = tty).split())
                 itupResult = (ilstTemp[1], ilstTemp[0])
             except:
-                pass
+                itupResult = None
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_tput():
@@ -159,7 +161,6 @@ def _GetWinSize_tput():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     strCurrentOS = platform.system()
     bCond1 = strCurrentOS == 'Linux'
     bCond2 = strCurrentOS == 'Darwin'
@@ -176,7 +177,9 @@ def _GetWinSize_tput():
             iHeight = int(strseqOutput[0])
             itupResult = (iWidth, iHeight)
         except:
-            pass
+            itupResult = None
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_ioctl():
@@ -194,7 +197,6 @@ def _GetWinSize_ioctl():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     bCond1 = 'termios' in sys.modules
     bCond2 = 'fcntl' in sys.modules
     if bCond1 and bCond2:
@@ -204,7 +206,7 @@ def _GetWinSize_ioctl():
                                                     termios.TIOCGWINSZ, '1234'))
                 itupResult = (int(iseqTemp[1]), int(iseqTemp[0]))
             except:
-                pass
+                itupResult = None
             if not (itupResult is None):
                 break
         if itupResult is None:
@@ -215,7 +217,9 @@ def _GetWinSize_ioctl():
                 os.close(iFileDescriptor)
                 itupResult = (int(iseqTemp[1]), int(iseqTemp[0]))
             except:
-                pass
+                itupResult = None
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_windll():
@@ -232,7 +236,6 @@ def _GetWinSize_windll():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     if hasattr(ctypes, 'windll'):
         try:
             objHandle = ctypes.windll.kernel32.GetStdHandle(-12) #stderr
@@ -245,8 +248,12 @@ def _GetWinSize_windll():
                 iWidth = iRight - iLeft + 1
                 iHeight = iBottom - iTop + 1
                 itupResult = (iWidth, iHeight)
+            else:
+                itupResult = None
         except:
-            pass
+            itupResult = None
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_os_environ():
@@ -262,11 +269,12 @@ def _GetWinSize_os_environ():
             determined
         None: if failed to determine the console size
     """
-    itupResult = None
     bCond1 = 'LINES' in os.environ.keys()
     bCond2 = 'COLUMNS' in os.environ.keys()
     if bCond1 and bCond2:
         itupResult = (int(os.environ['COLUMNS']), int(os.environ['LINES']))
+    else:
+        itupResult = None
     return itupResult
 
 def _GetWinSize_default():
@@ -357,7 +365,6 @@ def GetTerminalSize():
     Returns:
         tuple(int, int): width (columns) and height (lines) of the console
     """
-    itupResult = None
     strCurrentOS = platform.system()
     bCond1 = strCurrentOS == 'Linux'
     bCond2 = strCurrentOS == 'Darwin'

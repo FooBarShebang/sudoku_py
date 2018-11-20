@@ -1,0 +1,23 @@
+@startuml sudoku_ui_cli_keystroke_windows_keyboardlistenerwindows_getkeystroke
+
+title Activity Diagram of the Method\nKeyboardListenerWindows.GetKeystroke()
+
+start
+
+while (keypress is not detected)
+    if (keypress is detected?) then (True)
+        :read one wide character from input -> <b>Char</b> ;
+        
+        if (<b>Char</b> is u'\x00' OR u'\xe0'?) then (Yes)
+            :read another one wide character from input;
+            
+            :append it to <b>Char</b> ;
+        endif
+    endif
+end while
+
+:return <b>Char</b> >
+
+stop
+
+@enduml

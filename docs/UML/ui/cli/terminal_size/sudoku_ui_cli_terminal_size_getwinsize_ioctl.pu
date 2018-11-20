@@ -1,0 +1,41 @@
+@startuml sudoku_ui_cli_terminal_size_getwinsize_ioctl
+
+title Activity Diagram of the Function ui.cli._GetWinSize_ioctl()
+
+start
+
+if (if 'termios' and 'fcntl' modules are available?) then (True)
+    while (for <b>FileDescriptor</b> in [0, 1, 2])
+        if (in <b>try:</b> closure) then (no exceptions)
+            :query terminal size as\n<b>Temp = struct.unpack('hh', fcntl.ioctl(FileDescriptor, termios.TIOCGWINSZ, '1234'))</b> ;
+            
+            :<b>Result = (int(Temp[1]), int(Temp[0])</b> ;
+            
+            :break from the loop;
+        else (exception is raised)
+            :<b>Result</b> = None;
+        endif
+    end while
+    
+    if (<b>Result</b> is None?) then (True)
+        if (in <b>try:</b> closure) then (no exceptions)
+            :explicitely open read-only stream as\n<b>FileDescriptor = os.open(os.ctermid(), os.O_RDONLY)</b>;
+            
+            :query terminal size as\n<b>Temp = struct.unpack('hh', fcntl.ioctl(FileDescriptor, termios.TIOCGWINSZ, '1234'))</b> ;
+            
+            :close stream;
+            
+            :<b>Result = (int(Temp[1]), int(Temp[0])</b> ;
+        else (exception is raised)
+            :<b>Result</b> = None;
+        endif
+    endif
+else (False)
+    :<b>Result</b> = None;
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml
