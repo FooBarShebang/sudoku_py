@@ -8,6 +8,27 @@ This project aims for creation of a Sudoku game client, thus it can be played by
 
 The interaction with the user is planned to be implemented with CLI (console) as well as with GUI using various frameworks.
 
+## Installation
+
+Clone the official repository into your local workspace / project folder:
+
+```bash
+$ git clone <repository_path> "your project folder"
+```
+
+Initialize the UML templates submodule
+
+```bash
+$ cd "your project folder"/sudoku_py/docs/UML/Templates
+$ git submodule init
+```
+
+Download the content of the UML templates submodule
+
+```bash
+$ git submodule update --recursive --remote
+```
+
 ## Package Structure
 
 * **core**
