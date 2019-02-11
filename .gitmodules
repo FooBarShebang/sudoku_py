@@ -1,0 +1,3 @@
+[submodule "docs/UML/Templates"]
+	path = docs/UML/Templates
+	url = git@github.com:FooBarShebang/plant_uml.git
